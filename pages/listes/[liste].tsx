@@ -3,23 +3,25 @@ import styles from "../../styles/Home.module.css";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/router";
 
-export default function liste(props: any) {
-  console.log(props);
+export default function Liste(props: any) {
+  // console.log(props);
 
   const router = useRouter();
-  // console.log(router.query.liste?.charAt(0));
+  // console.log(typeof router.query.liste);
 
   // si Fallback = true qd affichage meilleur page
   if (!props.listeEnCours) {
     return <h1>Chargement</h1>;
   }
+  
+  const str = router.query.liste as string;
 
   return (
     <>
       <div className={styles.main}>
         <h1 className={styles.titre}>
-          {router.query.liste?.charAt(0).toUpperCase() +
-            router.query.liste?.slice(1)}
+          {str.charAt(0).toUpperCase() +
+            str.slice(1)}
           {/* {router.query.liste} */}
         </h1>
         <table className={styles.tableau}>
@@ -44,7 +46,7 @@ export async function getStaticProps(context: any) {
   const slug = context.params.liste;
   const data = await import("../../data/listes.json");
 
-  console.log("Le SLUG " + slug + "!!!!", data);
+  // console.log("Le SLUG " + slug + "!!!!", data);
 
   const listeEnCours = data.englishList.find((list) => list.name === slug);
 
@@ -66,7 +68,7 @@ export async function getStaticPaths() {
   const data = await import("../../data/listes.json");
 
   // pour compléter tableau de params => extraire un tableau depuis listes.json qui contriendait tous les noms qu'on a envie de retrouver
-  const paths = data.englishList.map((item) => ({
+  const paths = data.englishList.map((item:any) => ({
     params: { liste: item.name },
   }));
 

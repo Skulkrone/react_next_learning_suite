@@ -17,6 +17,9 @@ export default function Navbar() {
       <Link href="/cours">
         BTC
       </Link>
+      <Link href="/add">
+        Add (POST)
+      </Link>
     </nav>
   )
 }

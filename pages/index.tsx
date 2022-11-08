@@ -1,9 +1,40 @@
 import styles from "../styles/Home.module.css";
 import Head from "next/head";
 import { v4 as uuidv4 } from "uuid";
+import { useState, useEffect } from "react";
 
 export default function Home(props: any) {
-  console.log(props);
+  // console.log(props);
+
+  let englishList: any;
+
+  const [state, setState] = useState<typeof englishList>(false);
+
+  useEffect(() => {
+    newWord()
+  }, [])
+
+  const newWord = () => {
+    fetch('/api/vocapi')
+    .then(response =>  response.json())
+    .then(data => setState(data))
+  }
+
+  // console.log(state);
+  
+  // pour isoler un mot
+
+  let randomWord;
+  
+  // si un mot est dans les "starting block"
+
+  
+  if(state){
+    const array = state.englishList[0].data;
+    // pour faire un rendu alétaoire Math.floor et Math.random
+    randomWord = array[Math.floor(Math.random() * array.length)].en;
+    // console.log(randomWord);    
+  }
 
   return (
     <>
@@ -13,20 +44,25 @@ export default function Home(props: any) {
         <title>Titre</title>
       </Head>
       <div className={styles.main}>
-        <h1 className={styles.titre}>Vocabulaire de base !</h1>
-        <table className={styles.tableau}>
-          <tbody>
+        <h1 className={styles.titre}>Mot au hasard</h1>
+        {/* <h1 className={styles.titre}>Vocabulaire de base !</h1> */}
+        {/* <table className={styles.tableau}>
+          <tbody> */}
             {/* mettre des accolades n'induit pas le return de la fonction fléchée, il faut donc l'écrire
                 les espaces induisent bien ce return
             */}
-            {props.array.map((el: any) => (
+            {/* {props.array.map((el: any) => (
               <tr key={uuidv4()}>
                 <td>{el.en}</td>
                 <td>{el.fr}</td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            ))} */}
+          {/* </tbody>
+        </table> */}
+        <button 
+        onClick={newWord}
+        className="btn btn-primary d-block m-auto">Get RANDOM WORDS</button>
+        <h2 className="text-center text-capitalize">{randomWord}</h2>
       </div>
     </>
   );
